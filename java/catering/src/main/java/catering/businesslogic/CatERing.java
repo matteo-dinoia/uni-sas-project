@@ -1,10 +1,12 @@
 package catering.businesslogic;
 
 import catering.businesslogic.event.EventManager;
+import catering.businesslogic.kitchenTask.TaskManager;
 import catering.businesslogic.menu.MenuManager;
 import catering.businesslogic.recipe.RecipeManager;
 import catering.businesslogic.user.UserManager;
 import catering.persistence.MenuPersistence;
+import catering.persistence.TaskPersistence;
 
 public class CatERing {
     private static CatERing singleInstance;
@@ -16,20 +18,21 @@ public class CatERing {
         return singleInstance;
     }
 
-    private MenuManager menuMgr;
-    private RecipeManager recipeMgr;
-    private UserManager userMgr;
-    private EventManager eventMgr;
-
-    private MenuPersistence menuPersistence;
+    private final MenuManager menuMgr;
+    private final RecipeManager recipeMgr;
+    private final UserManager userMgr;
+    private final TaskManager taskMgr;
+    private final EventManager eventMgr;
 
     private CatERing() {
         menuMgr = new MenuManager();
         recipeMgr = new RecipeManager();
         userMgr = new UserManager();
+        taskMgr = new TaskManager();
         eventMgr = new EventManager();
-        menuPersistence = new MenuPersistence();
-        menuMgr.addEventReceiver(menuPersistence);
+
+        menuMgr.addEventReceiver(new MenuPersistence());
+        taskMgr.setEventReceiver(new TaskPersistence());
     }
 
 
@@ -47,4 +50,5 @@ public class CatERing {
 
     public EventManager getEventManager() { return eventMgr; }
 
+    public TaskManager getTaskManager() { return taskMgr; }
 }
