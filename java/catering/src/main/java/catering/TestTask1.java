@@ -20,12 +20,16 @@ public class TestTask1 {
             final var TASK_MGR = CatERing.getInstance().getTaskManager();
 
             ServiceInfo service = CatERing.getInstance().getEventManager().getEventInfo().get(0).getServices().get(0);
-
             TASK_MGR.openService(service);
+
+            System.out.println();
+            TASK_MGR.getTasks().forEach(System.out::println);
+
             Recipe randomRecipe = CatERing.getInstance().getRecipeManager().getRecipes().get(0);
             TASK_MGR.createNewTask(randomRecipe);
 
-            System.out.println(TASK_MGR.getTasks());
+            System.out.println();
+            TASK_MGR.getTasks().forEach(System.out::println);
 
             //TODO delete
             //System.out.println(TASK_MGR.getTasks());

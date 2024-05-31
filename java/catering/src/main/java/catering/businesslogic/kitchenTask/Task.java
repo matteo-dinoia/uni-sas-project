@@ -72,4 +72,18 @@ public class Task {
     public static ObservableList<Task> getAllTasks() {
         return FXCollections.observableArrayList(loadAllTasks());
     }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", recipe=" + recipe +
+                ", expiration=" + expiration +
+                ", durationMin=" + durationMin +
+                ", quantity=" + quantity +
+                ", completed=" + completed +
+                ", turns=" + turns +
+                ", services=" + services +
+                '}';
+    }
 }

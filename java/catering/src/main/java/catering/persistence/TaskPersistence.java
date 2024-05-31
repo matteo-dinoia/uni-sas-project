@@ -16,8 +16,8 @@ public class TaskPersistence implements TaskEventReceiver {
         PersistenceManager.executeBatchUpdate(taskInsert, 1, new BatchUpdateHandler() {
             @Override
             public void handleBatchItem(PreparedStatement ps, int batchCount) throws SQLException {
-                // TODO replace 0
-                ps.setInt(1, 0);
+                // TODO replace 2
+                ps.setInt(1, 2);
             }
 
             @Override
