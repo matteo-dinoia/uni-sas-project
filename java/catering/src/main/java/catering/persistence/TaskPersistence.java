@@ -24,7 +24,7 @@ public class TaskPersistence implements TaskEventReceiver {
             public void handleGeneratedIds(ResultSet rs, int count) throws SQLException {
                 // should be only one
                 if (count == 0) {
-                    task.setId(resultSet.getInt(1));
+                    task.setId(rs.getInt(1));
                 }
             }
         });
