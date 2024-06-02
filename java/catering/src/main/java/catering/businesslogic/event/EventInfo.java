@@ -8,7 +8,7 @@ import catering.businesslogic.user.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import catering.persistence.PersistenceManager;
-import catering.persistence.ResultHandler;
+import catering.persistence.handler.ResultHandler;
 
 public class EventInfo implements EventItemInfo {
     private int id;

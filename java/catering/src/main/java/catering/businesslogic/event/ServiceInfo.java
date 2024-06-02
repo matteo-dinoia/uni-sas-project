@@ -4,7 +4,7 @@ import catering.businesslogic.kitchenTask.Task;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import catering.persistence.PersistenceManager;
-import catering.persistence.ResultHandler;
+import catering.persistence.handler.ResultHandler;
 
 import java.sql.Date;
 import java.sql.ResultSet;

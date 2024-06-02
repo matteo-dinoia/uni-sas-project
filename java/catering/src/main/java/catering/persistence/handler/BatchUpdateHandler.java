@@ -1,4 +1,4 @@
-package catering.persistence;
+package catering.persistence.handler;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

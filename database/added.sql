@@ -18,6 +18,7 @@ DROP TABLE IF EXISTS `TaskService`;
 CREATE TABLE `TaskService` (
   `task_id` int(11) NOT NULL,
   `service_id` int(11) NOT NULL
+  -- TODO add primary key
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

@@ -2,6 +2,10 @@ package catering.persistence;
 
 // import com.sun.javafx.binding.StringFormatter;
 
+import catering.persistence.handler.BatchUpdateHandler;
+import catering.persistence.handler.PreparedStatementHandler;
+import catering.persistence.handler.ResultHandler;
+
 import java.sql.*;
 
 public class PersistenceManager {
@@ -19,6 +23,13 @@ public class PersistenceManager {
         input = input.replace("\t", "\\t");
         return input;
     }
+
+    public static Date getSqlDate(java.util.Date date){
+        if(date == null)
+            return null;
+        return new java.sql.Date(date.getTime());
+    }
+
     public static void testSQLConnection() {
         try (Connection conn = DriverManager.getConnection(url, username, password);
              PreparedStatement ps = conn.prepareStatement("SELECT * FROM Users");
@@ -72,9 +83,16 @@ public class PersistenceManager {
     }
 
     public static int executeUpdate(String update) {
+        return executeUpdate(update, null);
+    }
+
+    public static int executeUpdate(String update, PreparedStatementHandler psHandler){
         int result = 0;
         try (Connection conn = DriverManager.getConnection(url, username, password);
-             PreparedStatement ps = conn.prepareStatement(update, Statement.RETURN_GENERATED_KEYS)) {
+                PreparedStatement ps = conn.prepareStatement(update, Statement.RETURN_GENERATED_KEYS)) {
+            if (psHandler != null)
+                psHandler.setParameters(ps);
+
             result = ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {

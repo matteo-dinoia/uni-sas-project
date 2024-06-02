@@ -3,7 +3,7 @@ package catering.businesslogic.kitchenTask;
 import catering.businesslogic.event.ServiceInfo;
 import catering.businesslogic.recipe.Recipe;
 import catering.businesslogic.turns.Turn;
-import catering.persistence.BatchUpdateHandler;
+import catering.persistence.handler.BatchUpdateHandler;
 import catering.persistence.PersistenceManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,12 +20,12 @@ public class Task {
     private int id;
     private final Recipe recipe;
     private Date expiration;
-    private int durationMin;
-    private int quantity;
+    private Integer durationMin;
+    private Integer quantity;
     private boolean completed;
 
-    private List<Turn> turns = new ArrayList<>();
-    private List<ServiceInfo> services = new ArrayList<>();
+    private final List<Turn> turns = new ArrayList<>();
+    private final List<ServiceInfo> services = new ArrayList<>();
 
 
     private Task(Recipe recipe){
@@ -62,6 +63,7 @@ public class Task {
     public static ObservableList<Task> getAllTasks() {
         return FXCollections.observableArrayList(loadAllTasks());
     }
+
     private static ObservableList<Task> loadAllTasks() {
         String query = "SELECT * FROM catering.Tasks";
 
@@ -90,8 +92,8 @@ public class Task {
             serv.removeTask(this);
 
         // TODO are useful? and task.getTurns();
-        turns = null;
-        services = null;
+        turns.clear();
+        services.clear();
     }
 
 
@@ -105,18 +107,33 @@ public class Task {
     }
 
     public void saveTask() {
-        //TODO SAVE TASK
+        final var thisTask = this;
+        String taskUpdate = "UPDATE catering.Tasks SET " +
+                "expiration = ?, quantity = ?, duration_min = ?, completed = ? " +
+                "WHERE id = ?;";
+
+        PersistenceManager.executeUpdate(taskUpdate, (ps) -> {
+            ps.setDate(1, PersistenceManager.getSqlDate(thisTask.expiration));
+            if(thisTask.quantity != null)
+                ps.setInt(2, thisTask.quantity);
+            else ps.setNull(2, Types.INTEGER);
+            if(thisTask.durationMin != null)
+                ps.setInt(3, thisTask.durationMin);
+            else ps.setNull(3, Types.INTEGER);
+            ps.setBoolean(4, completed);
+            ps.setInt(5, id);
+        });
 
         saveConnectionsServices();
         saveConnectionsTurns();
     }
 
     private void saveConnectionsServices(){
-        var services = this.services;
+        final var services = this.services;
         String taskServiceInsert = "INSERT IGNORE INTO catering.TaskService (task_id, service_id) " +
                 "VALUES (" + this.id + ", ?);";
 
-        PersistenceManager.executeBatchUpdate(taskServiceInsert, this.services.size(), new BatchUpdateHandler() {
+        PersistenceManager.executeBatchUpdate(taskServiceInsert, services.size(), new BatchUpdateHandler() {
             @Override public void handleBatchItem(PreparedStatement ps, int batchCount) throws SQLException {
                 ps.setInt(1, services.get(batchCount).getId());
             }
@@ -126,10 +143,17 @@ public class Task {
     }
 
     private void saveConnectionsTurns(){
-        /* TODO
-        String taskTurnInsert = "DELETE FROM catering.TaskTurn WHERE task_id=" + this.id + ";";
-        PersistenceManager.executeUpdate(taskTurnDelete);
-         */
+        final var turns = this.turns;
+        String taskServiceInsert = "INSERT IGNORE INTO catering.TaskTurn (task_id, turn_id) " +
+                "VALUES (" + this.id + ", ?);";
+
+        PersistenceManager.executeBatchUpdate(taskServiceInsert, turns.size(), new BatchUpdateHandler() {
+            @Override public void handleBatchItem(PreparedStatement ps, int batchCount) throws SQLException {
+                ps.setInt(1, turns.get(batchCount).getId());
+            }
+
+            @Override public void handleGeneratedIds(ResultSet rs, int count) {}
+        });
     }
 
     public void deleteTask() {
@@ -141,5 +165,13 @@ public class Task {
 
         String taskTurnDelete = "DELETE FROM catering.TaskTurn WHERE task_id=" + this.id + ";";
         PersistenceManager.executeUpdate(taskTurnDelete);
+    }
+
+    public void setExpiration(Date expiration) {
+        this.expiration = expiration;
+    }
+
+    public void setDuration(Integer minutes) {
+        this.durationMin = minutes;
     }
 }

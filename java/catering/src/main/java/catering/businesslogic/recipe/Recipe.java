@@ -3,7 +3,7 @@ package catering.businesslogic.recipe;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import catering.persistence.PersistenceManager;
-import catering.persistence.ResultHandler;
+import catering.persistence.handler.ResultHandler;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -2,7 +2,7 @@ package catering.businesslogic.user;
 
 import javafx.collections.FXCollections;
 import catering.persistence.PersistenceManager;
-import catering.persistence.ResultHandler;
+import catering.persistence.handler.ResultHandler;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
