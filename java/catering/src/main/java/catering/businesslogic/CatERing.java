@@ -31,7 +31,7 @@ public class CatERing {
         taskMgr = new TaskManager();
         eventMgr = new EventManager();
 
-        menuMgr.addEventReceiver(new MenuPersistence());
+        menuMgr.setEventReceiver(new MenuPersistence());
         taskMgr.setEventReceiver(new TaskPersistence());
     }
 
