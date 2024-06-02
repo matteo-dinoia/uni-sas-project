@@ -3,10 +3,13 @@ package catering.businesslogic.kitchenTask;
 import catering.businesslogic.UseCaseLogicException;
 import catering.businesslogic.event.ServiceInfo;
 import catering.businesslogic.recipe.Recipe;
+import catering.businesslogic.turns.Turn;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.Date;
+import java.util.List;
+
 import catering.businesslogic.user.User;
 
 public class TaskManager {
@@ -37,13 +40,16 @@ public class TaskManager {
         return newTask;
     }
 
-    public void editTask(Task task, User cook, Date expiration, Integer durationMin, /*List<Turn> turns,*/ Integer quantity){
+    public void editTask(Task task, User cook, Date expiration, Integer durationMin, List<Turn> turns, Integer quantity){
         if(expiration != null) task.setExpiration(expiration);
         if(durationMin != null) task.setDuration(durationMin);
         if(quantity != null) task.setQuantity(quantity);
 
         if(cook != null && cook.isCook())
             task.setAssignedCook(cook);
+
+        if(turns != null)
+            task.setTurns(turns);
 
         //TODO Split this function (togli da qua)
         eventReceiver.updateTaskChanged(task);

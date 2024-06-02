@@ -26,7 +26,7 @@ public class Task {
     private boolean completed;
     private User assignedCook;
 
-    private final List<Turn> turns = new ArrayList<>();
+    private List<Turn> turns = new ArrayList<>();
     private final List<ServiceInfo> services = new ArrayList<>();
 
 
@@ -208,5 +208,9 @@ public class Task {
 
     public void setAssignedCook(User cook) {
         this.assignedCook = cook;
+    }
+
+    public void setTurns(List<Turn> turns) {
+        this.turns = turns;
     }
 }

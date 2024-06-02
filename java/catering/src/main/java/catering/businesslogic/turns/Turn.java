@@ -15,4 +15,9 @@ public class Turn {
     public int getId(){
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "turn " + this.id;
+    }
 }
