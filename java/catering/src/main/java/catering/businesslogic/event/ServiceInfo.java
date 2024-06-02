@@ -1,5 +1,6 @@
 package catering.businesslogic.event;
 
+import catering.businesslogic.kitchenTask.Task;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import catering.persistence.PersistenceManager;
@@ -9,6 +10,8 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ServiceInfo implements EventItemInfo {
     private int id;
@@ -17,6 +20,7 @@ public class ServiceInfo implements EventItemInfo {
     private Time timeStart;
     private Time timeEnd;
     private int participants;
+    private List<Task> tasks = new ArrayList<>();
 
     public ServiceInfo(String name) {
         this.name = name;
@@ -26,6 +30,10 @@ public class ServiceInfo implements EventItemInfo {
     public String toString() {
         return name + ": " + date + " (" + timeStart + "-" + timeEnd + "), " + participants + " pp.";
     }
+
+    public void addTask(Task t){ tasks.add(t); }
+
+    public void removeTask(Task t){ tasks.remove(t); }
 
     // STATIC METHODS FOR PERSISTENCE
 
@@ -48,5 +56,9 @@ public class ServiceInfo implements EventItemInfo {
         });
 
         return result;
+    }
+
+    public int getId() {
+        return id;
     }
 }

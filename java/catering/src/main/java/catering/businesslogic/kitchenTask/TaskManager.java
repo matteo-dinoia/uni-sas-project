@@ -23,33 +23,43 @@ public class TaskManager {
     public void getTabelloneTurni(){
         //TODO DO NOTHING
     }
-    public void createNewTask(Recipe recipe) throws UseCaseLogicException{
+    public Task createNewTask(Recipe recipe) throws UseCaseLogicException{
         if(service == null)
             throw new UseCaseLogicException("No service declared");
 
         Task newTask = new Task(recipe, service);
-        eventReceiver.createTask(newTask);
+        eventReceiver.updateTaskCreated(newTask);
+
+        return newTask;
     }
 
-    public ObservableList<Task> getTasks() {
-        return FXCollections.unmodifiableObservableList(Task.getAllTasks());
+    public void editTask(Task task /*cuoco?: Cuoco, scadenza: data, stimaTempo: durata, turni: insieme di Turni, quantità: numero*/){
+        //TODO change stuff
+        eventReceiver.updateTaskChanged(task);
     }
 
-    public void modificaCompito(/*compito: Compito, cuoco?: Cuoco, scadenza: data, stimaTempo: durata, turni: insieme di Turni, quantità: numero*/){
+    public void useTaskAlsoForOtherService(Task task, ServiceInfo serviceToAddTaskTo, Integer newQuantity) {
+        if(newQuantity != null)
+            task.setQuantity(newQuantity);
 
+        task.addService(serviceToAddTaskTo);
+        serviceToAddTaskTo.addTask(task);
+
+        eventReceiver.updateTaskChanged(task);
     }
 
-    public void cumulaCompiti(/*compito: Compito, servizio: Servizio, nuovaQuantità?: numero*/) {
-
-    }
-
-    public void eliminaCompito(Task task){
-
+    public void deleteTask(Task task){
+        task.destroy();
+        eventReceiver.updateTaskDeleted(task);
     }
 
     public void markTaskAsAlreadyCompleted(Task task, boolean completed){
         task.setCompleted(completed);
+        eventReceiver.updateTaskChanged(task);
+    }
 
-        //TODO persistency
+
+    public ObservableList<Task> getTasks() {
+        return FXCollections.unmodifiableObservableList(Task.getAllTasks());
     }
 }

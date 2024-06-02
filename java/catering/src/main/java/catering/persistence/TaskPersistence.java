@@ -9,24 +9,9 @@ import java.sql.SQLException;
 
 public class TaskPersistence implements TaskEventReceiver {
 
-    @Override public void createTask(Task task) {
+    @Override public void updateTaskCreated(Task task) { task.saveNewTask(); }
 
-        String taskInsert = "INSERT INTO catering.Tasks (recipe_id) VALUES (?);";
+    @Override public void updateTaskDeleted(Task task) { task.deleteTask(); }
 
-        PersistenceManager.executeBatchUpdate(taskInsert, 1, new BatchUpdateHandler() {
-            @Override
-            public void handleBatchItem(PreparedStatement ps, int batchCount) throws SQLException {
-                // TODO replace 2
-                ps.setInt(1, 2);
-            }
-
-            @Override
-            public void handleGeneratedIds(ResultSet rs, int count) throws SQLException {
-                // should be only one
-                if (count == 0) {
-                    task.setId(rs.getInt(1));
-                }
-            }
-        });
-    }
+    @Override public void updateTaskChanged(Task task) { task.saveTask(); }
 }
