@@ -198,7 +198,7 @@ public class Section {
             }
 
             @Override
-            public void handleGeneratedIds(ResultSet rs, int count) throws SQLException {
+            public void handleGeneratedIds(ResultSet rs, int count) {
                 // no generated ids to handle
             }
         });

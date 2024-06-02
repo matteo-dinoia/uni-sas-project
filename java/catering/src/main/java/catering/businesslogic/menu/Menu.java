@@ -371,7 +371,7 @@ public class Menu {
             }
 
             @Override
-            public void handleGeneratedIds(ResultSet rs, int count) throws SQLException {
+            public void handleGeneratedIds(ResultSet rs, int count) {
                 // non ci sono id autogenerati in MenuFeatures
             }
         });
@@ -448,7 +448,7 @@ public class Menu {
             String inuseQ = "SELECT * FROM Services WHERE approved_menu_id = " + m.id;
             PersistenceManager.executeQuery(inuseQ, new ResultHandler() {
                 @Override
-                public void handle(ResultSet rs) throws SQLException {
+                public void handle(ResultSet rs) {
                     // se c'è anche un solo risultato vuol dire che il menù è in uso
                     m.inUse = true;
                 }
@@ -481,7 +481,7 @@ public class Menu {
                     "proposed_menu_id = "+ m.id;
             PersistenceManager.executeQuery(inuseQ, new ResultHandler() {
                 @Override
-                public void handle(ResultSet rs) throws SQLException {
+                public void handle(ResultSet rs) {
                     // se c'è anche un solo risultato vuol dire che il menù è in uso
                     m.inUse = true;
                 }
@@ -503,7 +503,7 @@ public class Menu {
             }
 
             @Override
-            public void handleGeneratedIds(ResultSet rs, int count) throws SQLException {
+            public void handleGeneratedIds(ResultSet rs, int count) {
                 // no generated ids to handle
             }
         });
@@ -520,7 +520,7 @@ public class Menu {
             }
 
             @Override
-            public void handleGeneratedIds(ResultSet rs, int count) throws SQLException {
+            public void handleGeneratedIds(ResultSet rs, int count) {
                 // no generated ids to handle
             }
         });

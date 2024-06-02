@@ -1,13 +1,7 @@
 package catering;
 
 import catering.businesslogic.CatERing;
-import catering.businesslogic.UseCaseLogicException;
-import catering.businesslogic.event.ServiceInfo;
-import catering.businesslogic.kitchenTask.Task;
 import catering.businesslogic.kitchenTask.TaskManager;
-import catering.businesslogic.recipe.Recipe;
-
-import java.util.Date;
 
 public class TestTask2 {
     public static final CatERing INSTANCE = CatERing.getInstance();

@@ -323,10 +323,7 @@ public class MenuContent {
         alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeCancel);
 
         Optional<ButtonType> result = alert.showAndWait();
-        boolean deleteItems = false;
-        if (result.get() == buttonTypeOne) {
-            deleteItems = true;
-        }
+        boolean deleteItems = result.get() == buttonTypeOne;
         try {
             CatERing.getInstance().getMenuManager().deleteSection(sec, deleteItems);
         } catch (UseCaseLogicException ex) {
