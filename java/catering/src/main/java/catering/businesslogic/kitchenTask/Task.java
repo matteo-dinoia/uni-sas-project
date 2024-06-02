@@ -3,6 +3,7 @@ package catering.businesslogic.kitchenTask;
 import catering.businesslogic.event.ServiceInfo;
 import catering.businesslogic.recipe.Recipe;
 import catering.businesslogic.turns.Turn;
+import catering.businesslogic.user.User;
 import catering.persistence.handler.BatchUpdateHandler;
 import catering.persistence.PersistenceManager;
 import javafx.collections.FXCollections;
@@ -23,6 +24,7 @@ public class Task {
     private Integer durationMin;
     private Integer quantity;
     private boolean completed;
+    private User assignedCook;
 
     private final List<Turn> turns = new ArrayList<>();
     private final List<ServiceInfo> services = new ArrayList<>();
@@ -50,6 +52,7 @@ public class Task {
         return "Task{" +
                 "id=" + id +
                 ", recipe=" + recipe +
+                ", cook=" + (assignedCook != null ? assignedCook.getUserName() : null) +
                 ", expiration=" + expiration +
                 ", durationMin=" + durationMin +
                 ", quantity=" + quantity +
@@ -70,6 +73,7 @@ public class Task {
         ObservableList<Task> res = FXCollections.observableArrayList();
         PersistenceManager.executeQuery(query, (rs) -> {
             int id = rs.getInt("id");
+
             int recipeId = rs.getInt("recipe_id");
             Recipe recipe = Recipe.loadRecipeById(recipeId);
 
@@ -80,6 +84,8 @@ public class Task {
             task.quantity = rs.getInt("quantity");
             task.durationMin = rs.getInt("duration_min");
             task.completed = rs.getBoolean("completed");
+
+            task.assignedCook = User.loadUserById(rs.getInt("cook_id"));
 
             res.add(task);
         });
@@ -109,8 +115,8 @@ public class Task {
     public void saveTask() {
         final var thisTask = this;
         String taskUpdate = "UPDATE catering.Tasks SET " +
-                "expiration = ?, quantity = ?, duration_min = ?, completed = ? " +
-                "WHERE id = ?;";
+                " expiration = ?, quantity = ?, duration_min = ?, completed = ?, cook_id = ? " +
+                " WHERE id = ?;";
 
         PersistenceManager.executeUpdate(taskUpdate, (ps) -> {
             ps.setDate(1, PersistenceManager.getSqlDate(thisTask.expiration));
@@ -121,7 +127,10 @@ public class Task {
                 ps.setInt(3, thisTask.durationMin);
             else ps.setNull(3, Types.INTEGER);
             ps.setBoolean(4, completed);
-            ps.setInt(5, id);
+            if(thisTask.assignedCook != null)
+                ps.setInt(5, thisTask.assignedCook.getId());
+            else ps.setNull(5, Types.INTEGER);
+            ps.setInt(6, id);
         });
 
         saveConnectionsServices();
@@ -173,5 +182,9 @@ public class Task {
 
     public void setDuration(Integer minutes) {
         this.durationMin = minutes;
+    }
+
+    public void setAssignedCook(User cook) {
+        this.assignedCook = cook;
     }
 }

@@ -6,6 +6,7 @@ import catering.businesslogic.event.ServiceInfo;
 import catering.businesslogic.kitchenTask.Task;
 import catering.businesslogic.kitchenTask.TaskManager;
 import catering.businesslogic.recipe.Recipe;
+import catering.businesslogic.user.User;
 
 import java.util.Date;
 
@@ -31,10 +32,10 @@ public class TestTask1 {
             TASK_MGR.markTaskAsAlreadyCompleted(newTask, true);
             printTasks("marking as completed");
 
-            TASK_MGR.editTask(newTask, new Date(), 120, 50);
-            printTasks("changing date, duration, quanitity");
+            TASK_MGR.editTask(newTask, User.loadUserById(4), new Date(), 120, 50);
+            printTasks("changing cook, date, duration, quanitity");
 
-            TASK_MGR.editTask(newTask, null, 130, null);
+            TASK_MGR.editTask(newTask, null, null, 130, null);
             printTasks("changing duration");
 
         } catch (UseCaseLogicException ex) {
