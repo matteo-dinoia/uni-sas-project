@@ -14,6 +14,7 @@ public class TaskManager {
         this.eventReceiver = eventReceiver;
     }
 
+
     public void openService(ServiceInfo service) {
         this.service = service;
         //TODO controllo user magari

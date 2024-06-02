@@ -4,27 +4,24 @@ import catering.businesslogic.event.ServiceInfo;
 import catering.businesslogic.recipe.Recipe;
 import catering.businesslogic.turns.Turn;
 import catering.persistence.PersistenceManager;
-import catering.persistence.ResultHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 
 public class Task {
     private int id;
-    private Recipe recipe;
+    private final Recipe recipe;
     private Date expiration;
     private int durationMin;
     private int quantity;
     private boolean completed;
 
-    private ArrayList<Turn> turns = new ArrayList<>();
-    private ArrayList<ServiceInfo> services = new ArrayList<>();
+    private List<Turn> turns = new ArrayList<>();
+    private List<ServiceInfo> services = new ArrayList<>();
 
     public Task(Recipe recipe, ServiceInfo service){
         this.recipe = recipe;
