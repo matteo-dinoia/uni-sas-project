@@ -48,7 +48,8 @@ public class Task {
     public void setQuantity(int quantity) { this.quantity = quantity; }
 
 
-    @Override public String toString() {
+    public String toString(){ return this.id + " of recipe " + this.recipe; };
+    public String formatted(){
         return "Task{" +
                 "id=" + id +
                 ", recipe=" + recipe +
@@ -60,6 +61,16 @@ public class Task {
                 ", turns=" + turns +
                 ", services=" + services +
                 '}';
+    }
+
+
+    public void destroy() {
+        for(ServiceInfo serv : this.services)
+            serv.removeTask(this);
+
+        // TODO are useful? and task.getTurns();
+        turns.clear();
+        services.clear();
     }
 
 
@@ -88,20 +99,31 @@ public class Task {
             task.assignedCook = User.loadUserById(rs.getInt("cook_id"));
 
             res.add(task);
+            task.loadTaskServices();
+            task.loadTurnServices();
         });
         return res;
     }
 
+    private void loadTaskServices(){
+        final var thisTask = this;
+        String query = "SELECT * FROM catering.TaskService WHERE task_id = " + this.id;
 
-    public void destroy() {
-        for(ServiceInfo serv : this.services)
-            serv.removeTask(this);
-
-        // TODO are useful? and task.getTurns();
-        turns.clear();
-        services.clear();
+        ObservableList<Task> res = FXCollections.observableArrayList();
+        PersistenceManager.executeQuery(query, (rs) -> {
+            thisTask.services.add(ServiceInfo.loadServiceByID(rs.getInt("service_id")));
+        });
     }
 
+    private void loadTurnServices(){
+        final var thisTask = this;
+        String query = "SELECT * FROM catering.TaskTurn WHERE task_id = " + this.id;
+
+        ObservableList<Task> res = FXCollections.observableArrayList();
+        PersistenceManager.executeQuery(query, (rs) -> {
+            thisTask.turns.add(Turn.getTurnByID(rs.getInt("turn_id")));
+        });
+    }
 
     public void saveNewTask() {
         String taskInsert = "INSERT INTO catering.Tasks (recipe_id) VALUES (" + this.recipe.getId() + ");";

@@ -1,6 +1,7 @@
 package catering.businesslogic.event;
 
 import catering.businesslogic.kitchenTask.Task;
+import catering.businesslogic.turns.Turn;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import catering.persistence.PersistenceManager;
@@ -26,8 +27,8 @@ public class ServiceInfo implements EventItemInfo {
         this.name = name;
     }
 
-
-    public String toString() {
+    @Override public String toString(){ return name; }
+    public String formatted() {
         return name + ": " + date + " (" + timeStart + "-" + timeEnd + "), " + participants + " pp.";
     }
 
@@ -37,25 +38,37 @@ public class ServiceInfo implements EventItemInfo {
 
     // STATIC METHODS FOR PERSISTENCE
 
-    public static ObservableList<ServiceInfo> loadServiceInfoForEvent(int event_id) {
+    public static ObservableList<ServiceInfo> loadServiceInfoForEvent(int eventId) {
         ObservableList<ServiceInfo> result = FXCollections.observableArrayList();
         String query = "SELECT id, name, service_date, time_start, time_end, expected_participants " +
-                "FROM Services WHERE event_id = " + event_id;
-        PersistenceManager.executeQuery(query, new ResultHandler() {
-            @Override
-            public void handle(ResultSet rs) throws SQLException {
-                String s = rs.getString("name");
-                ServiceInfo serv = new ServiceInfo(s);
-                serv.id = rs.getInt("id");
-                serv.date = rs.getDate("service_date");
-                serv.timeStart = rs.getTime("time_start");
-                serv.timeEnd = rs.getTime("time_end");
-                serv.participants = rs.getInt("expected_participants");
-                result.add(serv);
-            }
+                "FROM Services WHERE event_id = " + eventId;
+        PersistenceManager.executeQuery(query, (rs) -> {
+            ServiceInfo serv = new ServiceInfo(rs.getString("name"));
+            serv.id = rs.getInt("id");
+            serv.date = rs.getDate("service_date");
+            serv.timeStart = rs.getTime("time_start");
+            serv.timeEnd = rs.getTime("time_end");
+            serv.participants = rs.getInt("expected_participants");
+            result.add(serv);
         });
 
         return result;
+    }
+
+    public static ServiceInfo loadServiceByID(int serviceId) {
+        ServiceInfo res = new ServiceInfo("");
+        String query = "SELECT * FROM Services WHERE id = " + serviceId;
+
+        PersistenceManager.executeQuery(query, (rs) -> {
+            res.name = rs.getString("name");
+            res.id = rs.getInt("id");
+            res.date = rs.getDate("service_date");
+            res.timeStart = rs.getTime("time_start");
+            res.timeEnd = rs.getTime("time_end");
+            res.participants = rs.getInt("expected_participants");
+        });
+
+        return res;
     }
 
     public int getId() {

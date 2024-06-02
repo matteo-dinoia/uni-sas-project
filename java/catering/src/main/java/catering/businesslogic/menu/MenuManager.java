@@ -18,9 +18,8 @@ public class MenuManager {
     public Menu createMenu(String title) throws UseCaseLogicException {
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
 
-        if (!user.isChef()) {
+        if (!user.isChef())
             throw new UseCaseLogicException();
-        }
 
         Menu m = new Menu(user, title, menuFeatures);
         this.setCurrentMenu(m);
@@ -30,9 +29,8 @@ public class MenuManager {
     }
 
     public Section defineSection(String name) throws UseCaseLogicException {
-        if (currentMenu == null) {
+        if (currentMenu == null)
             throw new UseCaseLogicException();
-        }
 
         Section sec = this.currentMenu.addSection(name);
 

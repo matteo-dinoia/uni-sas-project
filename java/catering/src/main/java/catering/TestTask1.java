@@ -21,7 +21,7 @@ public class TestTask1 {
             INSTANCE.getUserManager().fakeLogin("Lidia");
             System.out.println(INSTANCE.getUserManager().getCurrentUser());
 
-            ServiceInfo service = INSTANCE.getEventManager().getEventInfo().get(0).getServices().get(0);
+            ServiceInfo service = ServiceInfo.loadServiceByID(1);
             TASK_MGR.openService(service);
             printTasks("doing nothing");
 
@@ -35,6 +35,10 @@ public class TestTask1 {
             TASK_MGR.editTask(newTask, User.loadUserById(4), new Date(), 120, 50);
             printTasks("changing cook, date, duration, quanitity");
 
+            ServiceInfo service2 = ServiceInfo.loadServiceByID(2);
+            TASK_MGR.useTaskAlsoForOtherService(newTask, service2, 100);
+            printTasks("adding another service and changing quantity");
+
             TASK_MGR.editTask(newTask, null, null, 130, null);
             printTasks("changing duration");
 
@@ -45,6 +49,6 @@ public class TestTask1 {
 
     public static void printTasks(String operationMsg){
         System.out.println("\nDATA FROM SERVER AFTER '" + operationMsg + "':");
-        TASK_MGR.getTasks().forEach(System.out::println);
+        TASK_MGR.getTasks().forEach(task -> System.out.println(task.formatted()));
     }
 }
