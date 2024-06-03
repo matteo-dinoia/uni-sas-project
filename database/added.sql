@@ -36,5 +36,6 @@ DROP TABLE IF EXISTS `Turns`;
 CREATE TABLE `Turns` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `date` Date DEFAULT NULL,
+  `is_kicthen_releted` boolean NOT NULL,
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
