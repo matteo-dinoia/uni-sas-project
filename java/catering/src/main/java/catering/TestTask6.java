@@ -32,17 +32,15 @@ public class TestTask6 {
             newTask = TASK_MGR.createNewTask(randomRecipe);
             printTasks("adding a task");
 
-            List<Turn> turns = Turn.getAllTurns();
-            turns.removeLast();
-            turns.removeLast();
+            List<Turn> allTurns = Turn.getAllTurns();
 
-            newTask.setTurns(turns);
+            List<Turn> turns1 = allTurns.subList(1, 3);
+            List<Turn> turns2 = allTurns.subList(0, 2);
 
-            turns = Turn.getAllTurns();
-            turns.removeFirst();
-            turns.removeFirst();
-
-            newTask.setTurns(turns);
+            TASK_MGR.editTask(newTask, null, null, null, turns1, null);
+            printTasks("changing turns of a task");
+            TASK_MGR.editTask(newTask, null, null, null, turns2, null);
+            printTasks("changing turns of a task again");
         } catch (UseCaseLogicException ex) {
             System.out.println("Errore di logica nello use case: " + ex.getMessage());
         }
