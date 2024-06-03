@@ -61,11 +61,12 @@ public class TaskManager {
         if(turns != null){
             if(turns.stream().anyMatch(turn -> !turn.getIsKitchenTurn()))
                 throw new UseCaseLogicException("There is not a kitchen's turn for a kitchen's task");
+
+            List<Turn> oldTurns = task.getTurns();
             task.setTurns(turns);
+            eventReceiver.updateTaskTurnsRemoved(task, oldTurns);
         }
 
-
-        //TODO Split this function (togli da qua)
         eventReceiver.updateTaskChanged(task);
     }
 

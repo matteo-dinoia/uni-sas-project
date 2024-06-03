@@ -46,6 +46,14 @@ public class Task {
         this.services.add(service);
     }
     public void setQuantity(int quantity) { this.quantity = quantity; }
+    public void setExpiration(Date expiration) { this.expiration = expiration; }
+    public void setDuration(Integer minutes) { this.durationMin = minutes; }
+    public void setAssignedCook(User cook) { this.assignedCook = cook; }
+    public void setTurns(List<Turn> turns) { this.turns = turns; }
+
+    public List<Turn> getTurns() {
+        return new ArrayList<>(turns);
+    }
 
 
     public String toString(){ return this.id + " of recipe " + this.recipe; }
@@ -68,10 +76,6 @@ public class Task {
     public void destroy() {
         for(ServiceInfo serv : this.services)
             serv.removeTask(this);
-
-        // TODO are useful? and task.getTurns();
-        turns.clear();
-        services.clear();
     }
 
 
@@ -195,19 +199,18 @@ public class Task {
         PersistenceManager.executeUpdate(taskTurnDelete);
     }
 
-    public void setExpiration(Date expiration) {
-        this.expiration = expiration;
+    public void saveTurnDeletion(List<Turn> oldTurns) {
+        String turnsDelete = "DELETE FROM catering.TaskTurn WHERE task_id =" + this.id + " AND turn_id =?;";
+        PersistenceManager.executeBatchUpdate(turnsDelete, oldTurns.size(), new BatchUpdateHandler() {
+            @Override public void handleBatchItem(PreparedStatement ps, int batchCount) throws SQLException {
+                ps.setInt(1, oldTurns.get(batchCount).getId());
+            }
+
+            @Override public void handleGeneratedIds(ResultSet rs, int count){}
+        });
     }
 
-    public void setDuration(Integer minutes) {
-        this.durationMin = minutes;
-    }
 
-    public void setAssignedCook(User cook) {
-        this.assignedCook = cook;
-    }
 
-    public void setTurns(List<Turn> turns) {
-        this.turns = turns;
-    }
+
 }
