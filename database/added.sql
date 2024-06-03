@@ -36,9 +36,12 @@ DROP TABLE IF EXISTS `Turns`;
 CREATE TABLE `Turns` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `date` Date DEFAULT NULL,
-  `is_kicthen_related` boolean NOT NULL,
+  `is_kitchen_related` boolean NOT NULL,
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO catering.Turns (`id`, `date`, `is_kitchen_related`)
-VALUES(1, '2030-05-23', 0), (2, '2025-11-11', 1), (3, '2024-08-08', 1);
+VALUES(1, '2030-05-23', false), 
+	(2, '2025-11-11', true), 
+	(3, '2024-08-08', true),
+	(4, '2024-09-08', true),;

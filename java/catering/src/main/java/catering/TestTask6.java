@@ -35,7 +35,7 @@ public class TestTask6 {
             List<Turn> allTurns = Turn.getAllTurns();
 
             List<Turn> turns1 = allTurns.subList(1, 3);
-            List<Turn> turns2 = allTurns.subList(0, 2);
+            List<Turn> turns2 = allTurns.subList(2, 4);
 
             TASK_MGR.editTask(newTask, null, null, null, turns1, null);
             printTasks("changing turns of a task");
