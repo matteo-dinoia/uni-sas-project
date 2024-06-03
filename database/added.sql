@@ -40,9 +40,5 @@ CREATE TABLE `Turns` (
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO catering.Turns (id, `date`, is_kitchen_related)
-VALUES(1, '2030-05-23', 0);
-INSERT INTO catering.Turns (id, `date`, is_kitchen_related)
-VALUES(2, '2025-11-11', 1);
-INSERT INTO catering.Turns (id, `date`, is_kitchen_related)
-VALUES(3, '2024-08-08', 1);
+INSERT INTO catering.Turns (`id`, `date`, `is_kitchen_related`)
+VALUES(1, '2030-05-23', 0), (2, '2025-11-11', 1), (3, '2024-08-08', 1);
