@@ -44,4 +44,4 @@ INSERT INTO catering.Turns (`id`, `date`, `is_kitchen_related`)
 VALUES(1, '2030-05-23', false), 
 	(2, '2025-11-11', true), 
 	(3, '2024-08-08', true),
-	(4, '2024-09-08', true),;
+	(4, '2024-09-08', true);
