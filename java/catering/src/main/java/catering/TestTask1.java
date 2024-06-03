@@ -8,8 +8,10 @@ import catering.businesslogic.kitchenTask.TaskManager;
 import catering.businesslogic.recipe.Recipe;
 import catering.businesslogic.turns.Turn;
 import catering.businesslogic.user.User;
+import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -33,9 +35,12 @@ public class TestTask1 {
             TASK_MGR.markTaskAsAlreadyCompleted(newTask, true);
             printTasks("marking as completed");
 
+            ObservableList<Turn> allTurns = TASK_MGR.getTurns();
+            System.out.println("\nObtains turns: " + Arrays.toString(allTurns.stream().map(Turn::formatted).toArray()));
+
             List<Turn> turns = new ArrayList<>();
-            turns.add(Turn.getTurnByID(1));
-            turns.add(Turn.getTurnByID(2));
+            turns.add(allTurns.get(0));
+            turns.add(allTurns.get(1));
             TASK_MGR.editTask(newTask, User.loadUserById(4), new Date(), 120, turns,50);
             printTasks("changing cook, date, duration, quanitity");
 

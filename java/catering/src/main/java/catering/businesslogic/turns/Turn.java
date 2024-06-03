@@ -21,11 +21,14 @@ public class Turn {
     @Override public String toString() {
         return "turn " + this.id;
     }
+    public String formatted() {
+        return "turn" + this.id + " at " + this.date;
+    }
 
 
     public static Turn getTurnByID(int turnId) {
         Turn res = new Turn(0, null);
-        String query = "SELECT * FROM catering.Turn WHERE id = " + turnId;
+        String query = "SELECT * FROM catering.Turns WHERE id = " + turnId;
 
         PersistenceManager.executeQuery(query, (rs) -> {
             res.id = rs.getInt("id");
@@ -37,7 +40,7 @@ public class Turn {
 
     public static List<Turn> getAllTurns() {
         List<Turn> res = new ArrayList<>();
-        String query = "SELECT * FROM catering.Turn";
+        String query = "SELECT * FROM catering.Turns";
 
         PersistenceManager.executeQuery(query, (rs) -> {
             final int id = rs.getInt("id");
@@ -52,4 +55,6 @@ public class Turn {
     public Date getDate() {
         return date;
     }
+
+
 }
