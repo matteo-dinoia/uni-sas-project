@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 import catering.businesslogic.user.User;
 
@@ -26,8 +27,17 @@ public class TaskManager {
         //TODO controllo user magari
     }
 
-    public void getTabelloneTurni(){
-        //TODO DO NOTHING
+    public ObservableList<Turn> getTurns(){
+        Date now = new Date();
+        Stream<Turn> turns = Turn.getAllTurns().stream().filter(turn -> turn.getDate().after(now));
+
+        ObservableList<Turn> turnsObs = FXCollections.observableArrayList();
+        turns.forEach(turnsObs::add);
+        return FXCollections.unmodifiableObservableList(turnsObs);
+    }
+
+    public ObservableList<Task> getTasks() {
+        return FXCollections.unmodifiableObservableList(Task.getAllTasks());
     }
 
     public Task createNewTask(Recipe recipe) throws UseCaseLogicException{
@@ -76,7 +86,5 @@ public class TaskManager {
     }
 
 
-    public ObservableList<Task> getTasks() {
-        return FXCollections.unmodifiableObservableList(Task.getAllTasks());
-    }
+
 }
