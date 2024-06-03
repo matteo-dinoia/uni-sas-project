@@ -93,8 +93,8 @@ public class MenuItem {
                 sectionid +
                 ", " +
                 "'" + PersistenceManager.escapeString(mi.description) + "', " +
-                + mi.itemRecipe.getId() + ", " +
-                + pos + ");";
+                mi.itemRecipe.getId() + ", " +
+                pos + ");";
         PersistenceManager.executeUpdate(itemInsert);
 
         mi.id = PersistenceManager.getLastId();
@@ -107,14 +107,11 @@ public class MenuItem {
                 " AND " +
                 "section_id = " + sec_id +
                 " ORDER BY position";
-        PersistenceManager.executeQuery(query, new ResultHandler() {
-            @Override
-            public void handle(ResultSet rs) throws SQLException {
-                MenuItem mi = new MenuItem();
-                mi.description = rs.getString("description");
-                result.add(mi);
-                recids.add(rs.getInt("recipe_id"));
-            }
+        PersistenceManager.executeQuery(query, rs -> {
+            MenuItem mi = new MenuItem();
+            mi.description = rs.getString("description");
+            result.add(mi);
+            recids.add(rs.getInt("recipe_id"));
         });
 
         // carico qui le ricette perché non posso innestare due connessioni al DB

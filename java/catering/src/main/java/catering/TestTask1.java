@@ -19,8 +19,6 @@ public class TestTask1 {
 
     public static void main(String[] args) {
         try {
-            /* System.out.println("TEST DATABASE CONNECTION");
-            PersistenceManager.testSQLConnection();*/
             INSTANCE.getUserManager().fakeLogin("Lidia");
             System.out.println(INSTANCE.getUserManager().getCurrentUser());
 

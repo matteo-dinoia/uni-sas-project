@@ -61,7 +61,7 @@ public class PersistenceManager {
         int[] result = new int[0];
         try (
                 Connection conn = DriverManager.getConnection(url, username, password);
-                PreparedStatement ps = conn.prepareStatement(parametrizedQuery, Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement ps = conn.prepareStatement(parametrizedQuery, Statement.RETURN_GENERATED_KEYS)
         ) {
             for (int i = 0; i < itemNumber; i++) {
                 handler.handleBatchItem(ps, i);

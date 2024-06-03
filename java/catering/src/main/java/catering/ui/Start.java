@@ -15,6 +15,5 @@ public class Start {
         this.mainPaneController = main;
     }
 
-    public void initialize() {
-    }
+    public void initialize() {}
 }

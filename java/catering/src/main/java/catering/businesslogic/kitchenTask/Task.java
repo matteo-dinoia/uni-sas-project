@@ -48,7 +48,8 @@ public class Task {
     public void setQuantity(int quantity) { this.quantity = quantity; }
 
 
-    public String toString(){ return this.id + " of recipe " + this.recipe; };
+    public String toString(){ return this.id + " of recipe " + this.recipe; }
+
     public String formatted(){
         return "Task{" +
                 "id=" + id +
@@ -110,9 +111,7 @@ public class Task {
         String query = "SELECT * FROM catering.TaskService WHERE task_id = " + this.id;
 
         ObservableList<Task> res = FXCollections.observableArrayList();
-        PersistenceManager.executeQuery(query, (rs) -> {
-            thisTask.services.add(ServiceInfo.loadServiceByID(rs.getInt("service_id")));
-        });
+        PersistenceManager.executeQuery(query, (rs) -> thisTask.services.add(ServiceInfo.loadServiceByID(rs.getInt("service_id"))));
     }
 
     private void loadTurnServices(){
@@ -120,9 +119,7 @@ public class Task {
         String query = "SELECT * FROM catering.TaskTurn WHERE task_id = " + this.id;
 
         ObservableList<Task> res = FXCollections.observableArrayList();
-        PersistenceManager.executeQuery(query, (rs) -> {
-            thisTask.turns.add(Turn.getTurnByID(rs.getInt("turn_id")));
-        });
+        PersistenceManager.executeQuery(query, (rs) -> thisTask.turns.add(Turn.getTurnByID(rs.getInt("turn_id"))));
     }
 
     public void saveNewTask() {

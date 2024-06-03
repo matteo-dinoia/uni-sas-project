@@ -1,15 +1,11 @@
 package catering.businesslogic.event;
 
 import catering.businesslogic.kitchenTask.Task;
-import catering.businesslogic.turns.Turn;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import catering.persistence.PersistenceManager;
-import catering.persistence.handler.ResultHandler;
 
 import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
