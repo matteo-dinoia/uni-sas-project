@@ -8,31 +8,36 @@ import java.util.List;
 public class Turn {
     private int id;
     private Date date;
+    private boolean isKitchenTurn;
 
-    private Turn(int turnId, Date date){
+    private Turn() {}
+    private Turn(int turnId, Date date, boolean isKitchenTurn){
         // Creation of new turn is yet to be allowed
         // This is part of another UC
         this.id = turnId;
         this.date = date;
+        this.isKitchenTurn = isKitchenTurn;
     }
 
     public int getId(){ return id; }
 
     @Override public String toString() {
-        return "turn " + this.id;
+        return (isKitchenTurn ? "kitchen" : "service")
+                + " turn " + this.id;
     }
     public String formatted() {
-        return "turn" + this.id + " at " + this.date;
+        return this + " at " + this.date;
     }
 
 
     public static Turn getTurnByID(int turnId) {
-        Turn res = new Turn(0, null);
+        Turn res = new Turn();
         String query = "SELECT * FROM catering.Turns WHERE id = " + turnId;
 
         PersistenceManager.executeQuery(query, (rs) -> {
             res.id = rs.getInt("id");
             res.date = rs.getDate("date");
+            res.isKitchenTurn = rs.getBoolean("is_kitchen_related");
         });
 
         return res;
@@ -45,8 +50,9 @@ public class Turn {
         PersistenceManager.executeQuery(query, (rs) -> {
             final int id = rs.getInt("id");
             final Date date = rs.getDate("date");
+            final boolean isKitchenTurn = rs.getBoolean("is_kitchen_related");
 
-            res.add(new Turn(id, date));
+            res.add(new Turn(id, date, isKitchenTurn));
         });
 
         return res;
@@ -57,4 +63,7 @@ public class Turn {
     }
 
 
+    public boolean getIsKitchenTurn() {
+        return isKitchenTurn;
+    }
 }

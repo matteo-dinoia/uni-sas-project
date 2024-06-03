@@ -15,11 +15,12 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public class TestTask1 {
+public class TestTask3 {
     public static final CatERing INSTANCE = CatERing.getInstance();
     public static final TaskManager TASK_MGR = INSTANCE.getTaskManager();
 
     public static void main(String[] args) {
+        Task newTask;
         try {
             INSTANCE.getUserManager().fakeLogin("Lidia");
             System.out.println(INSTANCE.getUserManager().getCurrentUser());
@@ -29,28 +30,20 @@ public class TestTask1 {
             printTasks("doing nothing");
 
             Recipe randomRecipe = INSTANCE.getRecipeManager().getRecipes().get(0);
-            Task newTask = TASK_MGR.createNewTask(randomRecipe);
+            newTask = TASK_MGR.createNewTask(randomRecipe);
             printTasks("adding a task");
 
-            TASK_MGR.markTaskAsAlreadyCompleted(newTask, true);
-            printTasks("marking as completed");
+            try{
+                ObservableList<Turn> allTurns = TASK_MGR.getTurns();
+                System.out.println("\nObtains turns: " + Arrays.toString(allTurns.stream().map(Turn::formatted).toArray()));
 
-            ObservableList<Turn> allTurns = TASK_MGR.getTurns();
-            System.out.println("\nObtains turns: " + Arrays.toString(allTurns.stream().map(Turn::formatted).toArray()));
-
-            List<Turn> turns = new ArrayList<>();
-            turns.add(allTurns.get(1));
-            turns.add(allTurns.get(2));
-            TASK_MGR.editTask(newTask, User.loadUserById(4), new Date(), 120, turns,50);
-            printTasks("changing cook, date, duration, quanitity");
-
-            ServiceInfo service2 = ServiceInfo.loadServiceByID(2);
-            TASK_MGR.useTaskAlsoForOtherService(newTask, service2, 100);
-            printTasks("adding another service and changing quantity");
-
-            TASK_MGR.editTask(newTask, null, null, 130, null, null);
-            printTasks("changing duration");
-
+                List<Turn> turns = new ArrayList<>();
+                turns.add(allTurns.get(0));
+                TASK_MGR.editTask(newTask, null, null, null, turns,null);
+                System.out.println("No checking for business rules");
+            }catch (UseCaseLogicException ex) {
+                System.out.println("Business rules correctly checked -> error detected:\n" +ex.getMessage());
+            }
         } catch (UseCaseLogicException ex) {
             System.out.println("Errore di logica nello use case: " + ex.getMessage());
         }

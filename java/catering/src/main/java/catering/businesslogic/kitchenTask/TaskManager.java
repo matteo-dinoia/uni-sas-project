@@ -50,7 +50,7 @@ public class TaskManager {
         return newTask;
     }
 
-    public void editTask(Task task, User cook, Date expiration, Integer durationMin, List<Turn> turns, Integer quantity){
+    public void editTask(Task task, User cook, Date expiration, Integer durationMin, List<Turn> turns, Integer quantity) throws UseCaseLogicException{
         if(expiration != null) task.setExpiration(expiration);
         if(durationMin != null) task.setDuration(durationMin);
         if(quantity != null) task.setQuantity(quantity);
@@ -58,8 +58,12 @@ public class TaskManager {
         if(cook != null && cook.isCook())
             task.setAssignedCook(cook);
 
-        if(turns != null)
+        if(turns != null){
+            if(turns.stream().anyMatch(turn -> !turn.getIsKitchenTurn()))
+                throw new UseCaseLogicException("There is not a kitchen's turn for a kitchen's task");
             task.setTurns(turns);
+        }
+
 
         //TODO Split this function (togli da qua)
         eventReceiver.updateTaskChanged(task);
