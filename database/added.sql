@@ -20,7 +20,6 @@ CREATE TABLE `TaskService` (
   `task_id` int(11) NOT NULL,
   `service_id` int(11) NOT NULL,
   PRIMARY KEY(`task_id`, `service_id`)
-  -- TODO add primary key
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -30,4 +29,12 @@ CREATE TABLE `TaskTurn` (
   `task_id` int(11) NOT NULL,
   `turn_id` int(11) NOT NULL,
   PRIMARY KEY(`task_id`, `turn_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `Turns`;
+
+CREATE TABLE `Turns` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` Date DEFAULT NULL,
+  PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
